@@ -1,11 +1,15 @@
 import React, {useState} from 'react'
 import axios from 'axios'
+ // la rederiction
+import {useNavigate} from 'react-router-dom';
 
 function MyBlog() {
     const [file, setFile] = useState(null);
     const [username, setUsername] = useState('');
     const [titre, setTitre] = useState('');
     const [imagename, setImagename] = useState('');
+     // la rederiction
+    const navigate=useNavigate();
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
@@ -31,6 +35,9 @@ function MyBlog() {
             axios.post('http://localhost:5000/submit-blog/', formData)
             .then(response =>{
                 console.log(response.data);
+                // la rederiction 
+                return navigate('/blog')
+
             })
             .catch(err =>{
                 console.log(err);

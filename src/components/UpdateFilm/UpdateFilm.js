@@ -1,6 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios';
 import { useParams } from 'react-router-dom'
+//pour les dates 
+import moment from 'moment/moment';
+import 'moment/locale/fr'
+
+moment().local('fr')
+
+
 
 function UpdateFilm() {
     const params = useParams();
@@ -12,6 +19,7 @@ function UpdateFilm() {
     const [date, setDate] = useState('')
     const [realisateur, setRealisateur] = useState('')
     const [genre, setGenre] = useState('')
+    const [date_sortie, setDate_sortie] = useState('')
 
     useEffect(() =>{
         axios.get(`http://localhost:5000/film/${params.id}`)
@@ -24,6 +32,7 @@ function UpdateFilm() {
             setDate(response.data.date)
             setRealisateur(response.data.realisateur)
             setGenre(response.data.genre)
+            setDate_sortie(response.data.date_sortie)
         })
         .catch(error =>{
             setLoading(false)
@@ -44,6 +53,9 @@ function UpdateFilm() {
     const handleGenreChange = (event) =>{
         setGenre(event.target.value)
     }
+    const handleDate_sortieChange = (event) =>{
+        setDate_sortie(event.target.value)
+    }
 
 
   return (
@@ -53,6 +65,7 @@ function UpdateFilm() {
     <h2>{loading ? 'loading..' : film.date }</h2>
     <h3>{loading ? 'loading..' : film.realisateur }</h3>
     <h4>{loading ? 'loading..' : film.genre }</h4>
+    <h4>{loading ? 'loading..' : film.date_sortie }</h4>
 
     <form action={`http://localhost:5000/film/edit/${params.id}?_method=PUT`} method="post">
         <input type="hidden" name="_method" value="PUT" />
@@ -65,6 +78,9 @@ function UpdateFilm() {
         <input type="text" name="realisateur" value={realisateur} onChange={handleRealisateurChange} />
         <label for="">Genre</label>
         <input type="text" name="genre" value={genre} onChange={handleGenreChange} />
+        <label for="">Date de sortie </label>
+        <input type="date" name="date_sortie" value={date_sortie} onChange={handleDate_sortieChange} />
+
 
         <input type="submit" value="envoyer" />
     </form>
