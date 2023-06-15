@@ -28,7 +28,7 @@ function Home() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() =>{
-    axios.get('http://localhost:5000/')
+    axios.get('http://localhost:5000/',{withCredentials:true})
     .then(response =>{
       console.log(response.data);
       dispatch({type: 'FETCH_SUCCESS', payload: response.data});
@@ -37,23 +37,37 @@ function Home() {
       console.log(error);
       dispatch({type: 'FETCH_ERROR', payload: error})
     });
-  })
+  }, [])
 
+
+
+
+//Authentification : on a met pour quand  on est pas connect ou lieu d'afficher l'error en rouge sur toute la page il affiche ce qu'il est dans le return et sur le inspecter de la page  vous aurai l'error   console.log("utilisateur non connecter");
+  try{
+var returncontact= state.contacts.map(contact =>{
+  return(
+    <div>
+    <h1>{contact.firstname}</h1>
+    <h3>{contact.lastname}</h3>
+    <p>{contact.email}</p>
+
+    </div>
+  )
+
+})
+}
+catch(error){
+  console.log("utilisateur non connecter");
+  console.log(error);
+}
+
+  
   return (
     <React.Fragment>
     Bienvenue sur notre super site React !
     Voici la liste des contacts : 
-    {state.loading ? 'Loading...' : state.contacts.map(contact =>{
-      return(
-        <div>
-        <h1>{contact.firstname}</h1>
-        <h3>{contact.lastname}</h3>
-        <p>{contact.email}</p>
-
-        </div>
-      )
-
-    })}
+    
+    {returncontact}
 
 
 
@@ -61,5 +75,6 @@ function Home() {
     </React.Fragment>
   )
 }
+
 
 export default Home
